@@ -45,10 +45,10 @@ public class Loan {
 	@ToString.Exclude
 	@ManyToMany(cascade = CascadeType.PERSIST) //don't delete object if loan deleted
 	@JoinTable(
-			name = "loan_object",
+			name = "loan_an_object",
 			joinColumns = @JoinColumn(name = "loan_id"),
 			inverseJoinColumns = @JoinColumn(name = "object_id")
 	)
-	private Set<Objects> objects = new HashSet<>();
+	private Set<AnObject> anObject = new HashSet<>();
 	
 }

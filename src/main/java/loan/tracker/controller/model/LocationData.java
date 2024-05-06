@@ -5,7 +5,6 @@ import java.util.Set;
 
 import loan.tracker.entity.Loan;
 import loan.tracker.entity.Location;
-import loan.tracker.entity.Objects;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -86,74 +85,6 @@ public class LocationData {
 		
 		return location;
 	}
-	
-	@Data
-	@NoArgsConstructor
-	public class LoanData {
-		private Long loanId;
-		private String status;
-		private String startDate;
-		private String endDate;
-		private String purpose;
-		private Set<ObjectsData> objectSet = new HashSet<>();
-		
-		public LoanData(Loan loan) {
-			this.loanId = loan.getLoanId();
-			this.status = loan.getStatus();
-			this.startDate = loan.getStartDate();
-			this.endDate = loan.getEndDate();
-			this.purpose = loan.getPurpose();
-			
-			for(Objects objects : loan.getObjects()) {
-				this.objectSet.add(new ObjectsData(objects));
-			}
-		}
-		
-		public Loan toLoan() {
-			Loan loan = new Loan();
-			
-			loan.setLoanId(loanId);
-			loan.setStatus(status);
-			loan.setStartDate(startDate);
-			loan.setEndDate(endDate);
-			loan.setPurpose(purpose);
-			
-			for(ObjectsData objectsData : objectSet) {
-				loan.getObjects().add(objectsData.toObject());
-			}
-			
-			return loan;
-		}
-	}
-	
-	@Data
-	@NoArgsConstructor
-	public class ObjectsData {
-		private Long objectId;
-		private Long catalogNumber;
-		private String commonName;
-		private String materialType;
-		
-		public ObjectsData(Objects objects) {
-			this.objectId = objects.getObjectId();
-			this.catalogNumber = objects.getCatalogNumber();
-			this.commonName = objects.getCommonName();
-			this.materialType = objects.getMaterialType();		
-		}
-		
-		public Objects toObject() {
-			Objects objects = new Objects();
-			
-			objects.setObjectId(objectId);
-			objects.setCatalogNumber(catalogNumber);
-			objects.setCommonName(commonName);
-			objects.setMaterialType(materialType);
-			
-			return objects;
-			
-		}
-	}
-
 }
 
 
