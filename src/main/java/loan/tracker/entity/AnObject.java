@@ -14,22 +14,22 @@ import lombok.ToString;
 
 @Entity
 @Data
-public class Objects {
+public class AnObject {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long objectId;
 	
 	@EqualsAndHashCode.Exclude
-	private Long catalogNumber;
+	private String catalogNumber;
 	
 	@EqualsAndHashCode.Exclude
 	private String commonName;
 	
 	@EqualsAndHashCode.Exclude
-	private String materialType;
+	private String medium;
 	
 	@EqualsAndHashCode.Exclude
 	@ToString.Exclude
-	@ManyToMany(mappedBy = "objects")
+	@ManyToMany(mappedBy = "anObject")
 	private Set<Loan> loans = new HashSet<>();
 }

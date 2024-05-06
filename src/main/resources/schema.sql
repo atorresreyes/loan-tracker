@@ -1,5 +1,5 @@
-DROP TABLE IF EXISTS loan_objects;
-DROP TABLE IF EXISTS objects;
+DROP TABLE IF EXISTS loan_an_object;
+DROP TABLE IF EXISTS an_object;
 DROP TABLE IF EXISTS loan;
 DROP TABLE IF EXISTS location;
 
@@ -32,17 +32,17 @@ CREATE TABLE loan (
 	FOREIGN KEY(location_id) REFERENCES location (location_id) ON DELETE CASCADE
 );
 
-CREATE TABLE objects (
+CREATE TABLE an_object (
 	object_id int NOT NULL AUTO_INCREMENT,
 	catalog_number varchar(30) NOT NULL UNIQUE,
 	common_name varchar(128),
-	material_type varchar(128),
+	medium varchar(128),
 	PRIMARY KEY(object_id)
 );
 
-CREATE TABLE loan_objects (
+CREATE TABLE loan_an_object (
 	loan_id int NOT NULL,
 	object_id int NOT NULL,
 	FOREIGN KEY(loan_id) REFERENCES loan (loan_id) ON DELETE CASCADE,
-	FOREIGN KEY(object_id) REFERENCES objects (object_id) ON DELETE CASCADE
+	FOREIGN KEY(object_id) REFERENCES an_object (object_id) ON DELETE CASCADE
 );
