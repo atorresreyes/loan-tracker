@@ -1,1 +1,0 @@
-This application will help museums plan and keep track of their loans. It will include the information of where the loan is going, how long, and what objects it will have. A user will be able to create and delete loans, get information on what objects will be there and what time, and update details for if there are changes made to the loan details.
