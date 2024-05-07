@@ -2,6 +2,7 @@ package loan.tracker.controller;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -176,5 +177,12 @@ public class TrackerControllerTestSupport {
 		return which == 1 ? insertObjectInfo1 : insertObjectInfo2;
 	}
 	
+	protected LoanData updateLoan(long locationId, long loanId) {
+		return trackerController.updateLoan(locationId, loanId, insertLoanInfo2);
+	}
+	
+	protected Map<String, String> deleteLoan(Long loanId) {
+		return trackerController.deleteLoan(loanId);
+	}
 
 }
