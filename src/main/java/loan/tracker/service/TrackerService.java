@@ -136,7 +136,24 @@ public class TrackerService {
 				.orElseThrow(() -> new NoSuchElementException(
 						"Object with ID=" + objectId + " does not exist."));
 	}
+
+	@Transactional(readOnly = true)
+	public LoanData retrieveLoanById(Long loanId) {
+		Loan loan = findLoanById(loanId);
+		return new LoanData(loan);
+	}
 	
+	private Loan findLoanById(Long loanId) {
+		return loanDao.findById(loanId)
+				.orElseThrow(() -> new NoSuchElementException(
+						"Loan with ID=" + loanId + " was not found."));
+	}
+
+	@Transactional(readOnly = false)
+	public void deleteLoan(Long loanId) {
+		Loan loan = findLoanById(loanId);
+		loanDao.delete(loan);
+	}
 
 
 }

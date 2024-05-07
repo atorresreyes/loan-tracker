@@ -2,7 +2,9 @@ package loan.tracker.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -79,6 +81,48 @@ class TrackerControllerTest extends TrackerControllerTestSupport {
 		//then: the retrieved loans are the same as expected
 		assertThat(actual).isEqualTo(expected);
 	}
+
+	@Test
+	void testUpdateLoanById() {
+		//given: a loan in the table,
+				//two locations in the table,
+				//and an update loan request with a location id and loan id
+		LoanData request = buildInsertLoan(1);
+		insertLoan(request);
+		LocationData location1 = buildInsertLocation(1);
+		LocationData location2 = buildInsertLocation(2);
+		insertLocation(location1);
+		insertLocation(location2);
+		
+		LoanData expected = buildInsertLoan(2);
+		
+		//when: loan is updated 
+		LoanData actual = updateLoan(2L, 1L);
+		
+		//then: the retrieved loan is the same as expected
+		assertThat(actual).isEqualTo(expected);
+		
+		//and: there is one row in the loan table
+		assertThat(rowsInLoanTable()).isOne();
+	}
+
+	@Test 
+	void testDeleteLoanById() {
+		//given: a loan in the table
+				//and a delete loan request with loan id
+		insertLoan(buildInsertLoan(1));
+		Map<String, String> expected = new HashMap<>(); 
+		expected.put("message", "Loan with ID=1 was deleted successfully.");
+		
+		//when: a loan is deleted
+		Map<String, String> actual = deleteLoan(1L);
+		
+		//then: the deleted message is the same as expected
+		assertThat(actual).isEqualTo(expected);
+		
+	}
+
+
 
 
 
