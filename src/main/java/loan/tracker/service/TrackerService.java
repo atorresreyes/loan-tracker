@@ -4,8 +4,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,13 +41,14 @@ public class TrackerService {
 		
 		return new LocationData(dbLocation);
 	}
-	
 
 	@Transactional(readOnly = false)
 	public LoanData saveLoan(Long locationId, LoanData loanData) {
 		Location location = findLocationById(locationId);
 		Long loanId = loanData.getLoanId();
 		Loan loan = findOrCreateLoan(locationId, loanId);
+		Set<AnObject> objects = loan.getAnObject();
+		
 		
 		copyLoanFields(loan, loanData);
 		
@@ -53,6 +57,11 @@ public class TrackerService {
 		
 		//add loan to location's list of loans
 		location.getLoans().add(loan);
+		
+		//set objects
+			for(AnObject object : objects) {
+				loan.getAnObject().add(object);
+			}
 		
 		Loan dbLoan = loanDao.save(loan);
 		
@@ -104,7 +113,8 @@ public class TrackerService {
 	@Transactional(readOnly = false)
 	public ObjectsData saveObject(ObjectsData objectData) {
 		Long objectId = objectData.getObjectId();
-		AnObject object = findOrCreateObject(objectId);
+		String catNum = objectData.getCatalogNumber();
+		AnObject object = findOrCreateObject(objectId, catNum);
 		
 		copyObjectFields(object, objectData);
 		
@@ -120,9 +130,17 @@ public class TrackerService {
 	}
 
 
-	private AnObject findOrCreateObject(Long objectId) {
+	private AnObject findOrCreateObject(Long objectId, String catNum) {
+		if(Objects.isNull(catNum)) {
+			throw new IllegalStateException("Catalog number cannot be null.");
+		}
 		AnObject object;
 		if(Objects.isNull(objectId)) {
+			//preventing duplicate catalog numbers
+			Optional<AnObject> opObject = objectDao.findByCatalogNumber(catNum);
+			if (opObject.isPresent()) {
+				throw new DuplicateKeyException("Object with ID=" + catNum + " already exists.");
+			}
 			object = new AnObject();
 		} else {
 			object = findObjectById(objectId);
@@ -156,4 +174,28 @@ public class TrackerService {
 	}
 
 
+	@Transactional(readOnly = false)
+	public LoanData addObjectToLoan(Long loanId, Long objectId) {
+		AnObject anObject = findObjectById(objectId);
+		Loan loan = findLoanById(loanId);
+		
+		loan.getAnObject().add(anObject);
+		
+		Loan dbLoan = loanDao.save(loan);
+		
+		
+		return new LoanData(dbLoan);
+	}
+
+	@Transactional(readOnly = true)
+	public List<ObjectsData> retrieveAllObjectsInCatNumOrder() {
+		// @formatter: off
+		return objectDao.findAll()
+				.stream()
+				.sorted((object1, object2) -> 
+					object1.getCatalogNumber().compareTo(object2.getCatalogNumber()))
+				.map(object -> new ObjectsData(object))
+				.toList();
+		// @formatter: on
+	}
 }
