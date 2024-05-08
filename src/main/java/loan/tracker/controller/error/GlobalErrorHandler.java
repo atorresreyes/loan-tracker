@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -40,4 +41,27 @@ public class GlobalErrorHandler {
 		return exceptionMap;
 	}
 	
+	@ExceptionHandler(UnsupportedOperationException.class)
+	@ResponseStatus(code = HttpStatus.METHOD_NOT_ALLOWED)
+	public Map<String, String> handleUnsupportedOperationException(UnsupportedOperationException ex) {
+		log.info("Operation is forbidden.");
+		
+		Map<String, String> exceptionMap = new HashMap<String, String>();
+		
+		exceptionMap.put("message", ex.toString());
+		
+		return exceptionMap;
+	}
+	
+	@ExceptionHandler(DuplicateKeyException.class)
+	@ResponseStatus(code = HttpStatus.CONFLICT)
+	public Map<String, String> handleDuplicateKeyException(DuplicateKeyException ex) {
+		log.info("Duplicate key found.");
+		
+		Map<String, String> exceptionMap = new HashMap<String, String>();
+		
+		exceptionMap.put("message", ex.toString());
+		
+		return exceptionMap;
+	}
 }

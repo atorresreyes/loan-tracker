@@ -44,7 +44,6 @@ public class TrackerController {
 	
 	@PostMapping("/object")
 	@ResponseStatus(code = HttpStatus.CREATED)
-	//FUTURE UPDATE: Handle error if cat number is null or duplicate
 	public ObjectsData createObject(@RequestBody ObjectsData objectData) {
 		log.info("Creating object {}", objectData);
 		return trackerService.saveObject(objectData);
@@ -63,6 +62,12 @@ public class TrackerController {
 		return trackerService.retrieveLoanById(loanId);
 	}
 	
+	@GetMapping("/object")
+	public List<ObjectsData> retrieveAllObjectsInCatNumOrder() {
+		log.info("Retrieving all objects in numerical order by catalog number.");
+		return trackerService.retrieveAllObjectsInCatNumOrder();
+	}
+	
 	@PutMapping("/location/{locationId}/loan/{loanId}")
 	public LoanData updateLoan(@PathVariable Long locationId, @PathVariable Long loanId, @RequestBody LoanData loanData) {
 		log.info("Updating loan with ID={}", loanId);
@@ -70,9 +75,19 @@ public class TrackerController {
 		return trackerService.saveLoan(locationId, loanData);
 	}
 	
-	//FUTURE UPDATE:
-	//prevent all loans from being deleted
+	@PutMapping("/loan/{loanId}/object/{objectId}")
+	public LoanData addObjectToLoan(@PathVariable Long loanId, @PathVariable Long objectId) {
+		log.info("Adding object with ID={} to loan with ID={}", objectId, loanId);
+		return trackerService.addObjectToLoan(loanId, objectId); 
+	}
 	
+	//prevent all loans from being deleted
+	@DeleteMapping("/loan")
+	public void deleteAllLoans() {
+		log.info("Attempting to delete all loans.");
+		throw new UnsupportedOperationException("Deleting all loans is not allowed.");
+	}
+
 	@DeleteMapping("/loan/{loanId}")
 	public Map<String, String> deleteLoan(@PathVariable Long loanId) {
 		log.info("Deleting loan with ID={}", loanId);
@@ -80,5 +95,7 @@ public class TrackerController {
 		
 		return Map.of("message", "Loan with ID=" + loanId + " was deleted successfully.");
 	}
+	
+
 	
 }
