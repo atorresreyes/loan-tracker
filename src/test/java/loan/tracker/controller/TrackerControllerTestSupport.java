@@ -11,9 +11,9 @@ import org.springframework.test.jdbc.JdbcTestUtils;
 import loan.tracker.controller.model.LoanData;
 import loan.tracker.controller.model.LocationData;
 import loan.tracker.controller.model.ObjectsData;
+import loan.tracker.entity.AnObject;
 import loan.tracker.entity.Loan;
 import loan.tracker.entity.Location;
-import loan.tracker.entity.AnObject;
 
 public class TrackerControllerTestSupport {
 
@@ -120,13 +120,12 @@ public class TrackerControllerTestSupport {
 		
 		//inserting into table an example location 
 		//bc location cannot be null for loan
-		LocationData tempLocation = insertLocation(insertAddress1);
+		insertLocation(insertAddress1);
 		
 		clone.setLoanId(null);
 		
 		return trackerController.createLoan(1L, clone);
 	}
-	
 	
 	protected List<LoanData> insertTwoLoans() {
 		Loan loan1 = insertLoanInfo1.toLoan();
@@ -135,8 +134,8 @@ public class TrackerControllerTestSupport {
 		Loan loan2 = insertLoanInfo2.toLoan();
 		LoanData clone2 = new LoanData(loan2);;
 		
-		LocationData tempLocation1 = insertLocation(insertAddress1);
-		LocationData tempLocation2 = insertLocation(insertAddress2);
+		insertLocation(insertAddress1);
+		insertLocation(insertAddress2);
 		
 		clone1.setLoanId(null);
 		clone2.setLoanId(null);
