@@ -79,6 +79,12 @@ public class TrackerController {
 		return trackerService.retrieveLocationById(locationId);
 		}
 	
+	@PutMapping("/loan/{loanId}/object/{objectId}")
+	public LoanData addObjectToLoan(@PathVariable Long loanId, @PathVariable Long objectId) {
+		log.info("Adding object with ID={} to loan with ID={}", objectId, loanId);
+		return trackerService.addObjectToLoan(loanId, objectId); 
+	}
+	
 	@PutMapping("/location/{locationId}/loan/{loanId}")
 	public LoanData updateLoan(@PathVariable Long locationId, @PathVariable Long loanId, @RequestBody LoanData loanData) {
 		log.info("Updating loan with ID={}", loanId);
@@ -86,18 +92,11 @@ public class TrackerController {
 		return trackerService.saveLoan(locationId, loanData);
 	}
 	
-	@PutMapping("/loan/{loanId}/object/{objectId}")
-	public LoanData addObjectToLoan(@PathVariable Long loanId, @PathVariable Long objectId) {
-		log.info("Adding object with ID={} to loan with ID={}", objectId, loanId);
-		return trackerService.addObjectToLoan(loanId, objectId); 
-	}
-	
 	@PutMapping("/object/{objectId}")
 	public ObjectsData updateObject(@PathVariable Long objectId, @RequestBody ObjectsData objectsData) {
 		log.info("Updating object with ID={}", objectId);
 		objectsData.setObjectId(objectId);
 		return trackerService.saveObject(objectsData);
-		
 	}
 	
 	@PutMapping("/location/{locationId}")
