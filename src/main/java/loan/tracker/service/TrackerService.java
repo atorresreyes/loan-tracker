@@ -198,4 +198,10 @@ public class TrackerService {
 				.toList();
 		// @formatter: on
 	}
+
+	@Transactional(readOnly = false)
+	public void deleteObject(Long objectId) {
+		AnObject anObject = findObjectById(objectId);
+		objectDao.delete(anObject);
+	}
 }

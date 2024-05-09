@@ -49,7 +49,6 @@ public class TrackerController {
 		return trackerService.saveObject(objectData);
 	}
 
-	
 	@GetMapping("/loan")
 	public List<LoanData> retrieveAllLoans() {
 		log.info("Retrieving all loans");
@@ -81,6 +80,14 @@ public class TrackerController {
 		return trackerService.addObjectToLoan(loanId, objectId); 
 	}
 	
+	@PutMapping("/object/{objectId}")
+	public ObjectsData updateObject(@PathVariable Long objectId, @RequestBody ObjectsData objectsData) {
+		log.info("Updating object with ID={}", objectId);
+		objectsData.setObjectId(objectId);
+		return trackerService.saveObject(objectsData);
+		
+	}
+	
 	//prevent all loans from being deleted
 	@DeleteMapping("/loan")
 	public void deleteAllLoans() {
@@ -92,10 +99,20 @@ public class TrackerController {
 	public Map<String, String> deleteLoan(@PathVariable Long loanId) {
 		log.info("Deleting loan with ID={}", loanId);
 		trackerService.deleteLoan(loanId);
-		
 		return Map.of("message", "Loan with ID=" + loanId + " was deleted successfully.");
 	}
 	
-
+	@DeleteMapping("/object")
+	public void deleteAllObjects() {
+		log.info("Attempting to delete all objects.");
+		throw new UnsupportedOperationException("Deleting all objects is not allowed.");
+	}
+	
+	@DeleteMapping("/object/{objectId}")
+	public Map<String, String> deleteObject(@PathVariable Long objectId) {
+		log.info("Deleting object with ID={}", objectId);
+		trackerService.deleteObject(objectId);
+		return Map.of("message", "Object with ID=" + objectId + " was deleted successfully.");
+	}
 	
 }
