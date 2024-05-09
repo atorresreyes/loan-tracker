@@ -139,6 +139,7 @@ public class TrackerService {
 				.orElseThrow(() -> new NoSuchElementException(
 						"Location with ID=" + locationId + " does not exist"));
 	}
+	
 	@Transactional(readOnly = true)
 	public List<LoanData> retrieveAllLoans() {
 		List<Loan> loanEntities = loanDao.findAll();
@@ -149,8 +150,7 @@ public class TrackerService {
 			allLoans.add(loanData);
 		}
 		
-		return allLoans;
-		
+		return allLoans;	
 	}
 
 	@Transactional(readOnly = false)
@@ -172,7 +172,6 @@ public class TrackerService {
 		object.setMedium(objectData.getMedium());
 	}
 
-
 	private AnObject findOrCreateObject(Long objectId, String catNum) {
 		if(Objects.isNull(catNum)) {
 			throw new IllegalStateException("Catalog number cannot be null.");
@@ -190,7 +189,6 @@ public class TrackerService {
 		}
 		return object;
 	}
-
 
 	private AnObject findObjectById(Long objectId) {
 		return objectDao.findById(objectId)
@@ -218,7 +216,6 @@ public class TrackerService {
 		loan.getAnObject().add(anObject);
 		
 		Loan dbLoan = loanDao.save(loan);
-		
 		
 		return new LoanData(dbLoan);
 	}
@@ -267,5 +264,4 @@ public class TrackerService {
 		Loan loan = findLoanById(loanId);
 		loanDao.delete(loan);
 	}
-
 }
