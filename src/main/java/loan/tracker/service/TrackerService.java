@@ -58,6 +58,7 @@ public class TrackerService {
 		location.setContactName(locationData.getContactName());
 		location.setPhone(locationData.getPhone());
 		location.setEmail(locationData.getEmail());
+		location.setStreetAddress(locationData.getStreetAddress());
 		location.setCity(locationData.getCity());
 		location.setState(locationData.getState());
 		location.setZip(locationData.getZip());
