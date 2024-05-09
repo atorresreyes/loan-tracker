@@ -120,8 +120,7 @@ public class TrackerControllerTestSupport {
 		
 		//inserting into table an example location 
 		//bc location cannot be null for loan
-		LocationData tempLocation = trackerController.createLocation(insertAddress1);
-		tempLocation.setLocationId(1L);
+		LocationData tempLocation = insertLocation(insertAddress1);
 		
 		clone.setLoanId(null);
 		
@@ -136,10 +135,8 @@ public class TrackerControllerTestSupport {
 		Loan loan2 = insertLoanInfo2.toLoan();
 		LoanData clone2 = new LoanData(loan2);;
 		
-		LocationData tempLocation1 = trackerController.createLocation(insertAddress1);
-		tempLocation1.setLocationId(1L);
-		LocationData tempLocation2 = trackerController.createLocation(insertAddress2);
-		tempLocation2.setLocationId(2L);
+		LocationData tempLocation1 = insertLocation(insertAddress1);
+		LocationData tempLocation2 = insertLocation(insertAddress2);
 		
 		clone1.setLoanId(null);
 		clone2.setLoanId(null);
