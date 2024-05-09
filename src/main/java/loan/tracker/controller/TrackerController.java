@@ -67,6 +67,18 @@ public class TrackerController {
 		return trackerService.retrieveAllObjectsInCatNumOrder();
 	}
 	
+	@GetMapping("/location")
+	public List<LocationData> retrieveAllLocationsAlphabeticallyByPlaceName() {
+		log.info("Retrieving all locations in alphabetical order by place name.");
+		return trackerService.retrieveAllLocationsAlphabeticallyByPlaceName();
+	}
+	
+	@GetMapping("/location/{locationId}")
+	public LocationData retrieveLocationById(@PathVariable Long locationId) {
+		log.info("Retrieving location with ID={}", locationId);
+		return trackerService.retrieveLocationById(locationId);
+		}
+	
 	@PutMapping("/location/{locationId}/loan/{loanId}")
 	public LoanData updateLoan(@PathVariable Long locationId, @PathVariable Long loanId, @RequestBody LoanData loanData) {
 		log.info("Updating loan with ID={}", loanId);
@@ -86,6 +98,13 @@ public class TrackerController {
 		objectsData.setObjectId(objectId);
 		return trackerService.saveObject(objectsData);
 		
+	}
+	
+	@PutMapping("/location/{locationId}")
+	public LocationData updateLocation(@PathVariable Long locationId, @RequestBody LocationData locationData) {
+		log.info("Updating location with ID={}", locationId);
+		locationData.setLocationId(locationId);
+		return trackerService.saveLocation(locationData);
 	}
 	
 	//prevent all loans from being deleted
@@ -114,5 +133,19 @@ public class TrackerController {
 		trackerService.deleteObject(objectId);
 		return Map.of("message", "Object with ID=" + objectId + " was deleted successfully.");
 	}
+	
+	@DeleteMapping("/location")
+	public void deleteAllLocations() {
+		log.info("Attempting to delete all locations.");
+		throw new UnsupportedOperationException("Deleting all locations is not allowed.");
+	}
+	
+	@DeleteMapping("/location/{locationId}")
+	public Map<String, String> deleteLocation(@PathVariable Long locationId) {
+		log.info("Deleting location with ID={}", locationId);
+		trackerService.deleteLocation(locationId);
+		return Map.of("message", "Location with ID=" + locationId + " was deleted successfully.");
+	}
+
 	
 }

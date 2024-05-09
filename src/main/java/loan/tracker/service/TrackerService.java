@@ -35,11 +35,53 @@ public class TrackerService {
 	
 	@Transactional(readOnly = false)
 	public LocationData saveLocation(LocationData locationData) {
-		//FUTURE UPDATE: Handle error if place name or contact name are null
-		Location location = locationData.toLocation();
+		Long locationId = locationData.getLocationId();
+		String placeName = locationData.getPlaceName();
+		String contactName = locationData.getContactName();
+		Location location = findOrCreateLocation(locationId, placeName, contactName);
+		Set<Loan> loans = location.getLoans();
+		
+		copyLocationFields(location, locationData);
+		
+		// set loans
+		for(Loan loan : loans) {
+			location.getLoans().add(loan);
+		}
+		
 		Location dbLocation = locationDao.save(location);
 		
 		return new LocationData(dbLocation);
+	}
+
+	private void copyLocationFields(Location location, LocationData locationData) {
+		location.setPlaceName(locationData.getPlaceName());
+		location.setContactName(locationData.getContactName());
+		location.setPhone(locationData.getPhone());
+		location.setEmail(locationData.getEmail());
+		location.setCity(locationData.getCity());
+		location.setState(locationData.getState());
+		location.setZip(locationData.getZip());
+		location.setMailingStreet(locationData.getMailingStreet());
+		location.setMailingCity(locationData.getMailingCity());
+		location.setMailingState(locationData.getMailingState());
+		location.setMailingZip(locationData.getMailingZip());
+	}	
+
+	private Location findOrCreateLocation(Long locationId, String placeName, String contactName) {
+		if(Objects.isNull(placeName)) {
+			throw new IllegalStateException("Place name cannot be null.");
+		}
+		if(Objects.isNull(contactName)) {
+			throw new IllegalStateException("Contact name cannot be null.");
+		}
+		Location location;
+		if(Objects.isNull(locationId)) {
+			location = new Location();
+		} else { 
+			location = findLocationById(locationId);
+		}
+		
+		return location;
 	}
 
 	@Transactional(readOnly = false)
@@ -168,13 +210,6 @@ public class TrackerService {
 	}
 
 	@Transactional(readOnly = false)
-	public void deleteLoan(Long loanId) {
-		Loan loan = findLoanById(loanId);
-		loanDao.delete(loan);
-	}
-
-
-	@Transactional(readOnly = false)
 	public LoanData addObjectToLoan(Long loanId, Long objectId) {
 		AnObject anObject = findObjectById(objectId);
 		Loan loan = findLoanById(loanId);
@@ -198,10 +233,38 @@ public class TrackerService {
 				.toList();
 		// @formatter: on
 	}
+	
+	public List<LocationData> retrieveAllLocationsAlphabeticallyByPlaceName() {
+		// @formatter:off 
+		return locationDao.findAll()
+				.stream()
+				.sorted((location1, location2) ->
+						location1.getPlaceName().compareTo(location2.getPlaceName()))
+				.map(location -> new LocationData(location))
+				.toList();
+				// @formatter: on
+	}
+	
+	public LocationData retrieveLocationById(Long locationId) {
+		Location location = findLocationById(locationId);
+		return new LocationData(location);
+	}
 
 	@Transactional(readOnly = false)
 	public void deleteObject(Long objectId) {
 		AnObject anObject = findObjectById(objectId);
 		objectDao.delete(anObject);
 	}
+
+	public void deleteLocation(Long locationId) {
+		Location location = findLocationById(locationId);
+		locationDao.delete(location);
+	}
+
+	@Transactional(readOnly = false)
+	public void deleteLoan(Long loanId) {
+		Loan loan = findLoanById(loanId);
+		loanDao.delete(loan);
+	}
+
 }
