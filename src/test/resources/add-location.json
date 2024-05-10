@@ -12,3 +12,33 @@
 	"mailingState": "California",
 	"mailingZip": "90036"	
 }
+
+{
+	"placeName": "University Art Museum",
+	"contactName": "Darcie Abbatiello",
+	"phone": "(518) 442-3839",
+	"email": "dabbatiello@albany.edu",
+	"streetAddress": "1400 Washington Avenue",
+	"city": "Albany",
+	"state": "New York",
+	"zip": "12222",
+	"mailingStreet": "353 Broadway",
+	"mailingCity": "Albany",
+	"mailingState": "New York",
+	"mailingZip": "12207"	
+}
+
+{
+	"placeName": "Milwaukee Art Museum",
+	"contactName": "Jane O'Meara",
+	"phone": "(414) 224-3200",
+	"email": "janeomeara@mam.org",
+	"streetAddress": "700 N. Art Museum Drive",
+	"city": "Milwaukee",
+	"state": "Wisconsin",
+	"zip": "53202",
+	"mailingStreet": "P.O. Box 202",
+	"mailingCity": "Milwaukee",
+	"mailingState": "Wisconsin",
+	"mailingZip": "53202"	
+}

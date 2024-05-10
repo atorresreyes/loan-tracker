@@ -2,5 +2,19 @@
 	"status": "Current",
 	"startDate": "April 15, 2023",
 	"endDate": "April 15, 2025",
-	"purpose": "For bug exhibit"
+	"purpose": "For Artistic Odyssey exhibit"
+}
+
+{
+	"status": "Pending",
+	"startDate": "October 25, 2024",
+	"endDate": "July 1, 2025",
+	"purpose": "For Connections Through Time exhibit"
+}
+
+{
+	"status": "Closed",
+	"startDate": "February 21, 2022",
+	"endDate": "February 19, 2024",
+	"purpose": "For master's thesis research"
 }
