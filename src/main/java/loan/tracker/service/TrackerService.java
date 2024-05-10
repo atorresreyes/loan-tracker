@@ -232,6 +232,7 @@ public class TrackerService {
 		// @formatter: on
 	}
 	
+	@Transactional(readOnly = true)
 	public List<LocationData> retrieveAllLocationsAlphabeticallyByPlaceName() {
 		// @formatter:off 
 		return locationDao.findAll()
